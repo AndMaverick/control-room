@@ -4,7 +4,7 @@
   const { esc, links, TOOLS, ESSAYS } = CR;
   const $ = (s) => document.querySelector(s);
   CR.mountNav("receipts.html");
-  $("#book").href = links.book("receipts-book", "receipts");
+  $("#explore").href = links.site("receipts-explore", "receipts");
 
   const EVIDENCE = {
     press: ["Third-party press", "Reported by an independent publication."],
@@ -53,7 +53,7 @@
     const f = filterState.theme;
     const inst = section("I", "Settings", "The institutions where I developed these views. The repositories below are independent work and were not built for any of them.",
       `<div class="grid g3" style="margin-top:22px">${INSTITUTIONS.map((i) => `<div class="panel card"><h3>${i.name}</h3><p style="margin:0">${esc(i.text)}</p>${i.note ? `<p class="dim" style="font-size:13px;margin:0">${esc(i.note)}</p>` : ""}<div class="ev">${i.ev.map(([k, s]) => evTag(k, s)).join("")}</div></div>`).join("")}</div>
-       <p class="dim" style="margin-top:22px">Advisory organizations, as published at <a href="${HOME[0]}">andmaverick.com</a>: ${ORGS.join(", ")}. This page does not describe the scope or outcome of any engagement.</p>`);
+       <p class="dim" style="margin-top:22px">Advisory organizations, as published at <a href="${HOME[0]}">andmaverick.com</a>: ${ORGS.join(", ")}. This page does not describe the scope or outcome of any engagement. The questions behind this work are the subject of a <button type="button" class="linklike" data-par="receipts">private architecture review</button>.</p>`);
     const press = section("II", "Public record", "What others have published or recorded.",
       `<div class="grid g3" style="margin-top:22px">${PRESS.filter((p) => !f || !p.theme.length || p.theme.includes(f)).map((p) => `<div class="panel card"><h3 style="font-size:22px;line-height:1.1">${esc(p.title)}</h3>${p.by ? `<p class="dim" style="margin:0">${esc(p.by)}</p>` : ""}<div class="ev">${evTag(p.ev, [p.url, ""])}<a href="${esc(p.url)}">Read or listen</a></div></div>`).join("")}</div>`);
     const threads = section("III", "The questions I keep working on", "Each essay asks a question. Each set of repositories explores part of it in code. Open one thread at a time.",
