@@ -49,7 +49,23 @@ python -I -m unittest discover -s tests -t . -v
 
 ## Measurement and privacy
 
-No cookies, no analytics scripts, nothing stored. The only third-party requests are the jsDelivr CDN (runtime and fonts). Outbound links to andmaverick.com and the booking page carry `utm_source=controlroom`, a medium, a campaign (the scenario or room) and a content label for the button, plus the visitor's inbound `utm_source` as `utm_term` when they arrived from a tagged link. Attribution therefore lands in the analytics already running on andmaverick.com, and this site collects nothing itself. The Verify button, when clicked, requests files from raw.githubusercontent.com.
+No cookies. What a visitor explores is kept in their own browser tab (sessionStorage) so a private architecture review inquiry can carry that context, and it leaves the tab only inside an email the visitor chooses to send. Third-party requests are the jsDelivr CDN (runtime and fonts) and Google Analytics, loaded in consent-denied, cookieless mode against the property already on andmaverick.com. Events are categorical and carry no personal data. Outbound links to andmaverick.com and the booking page carry `utm_source=controlroom`, a medium, a campaign (the scenario or room) and a content label for the button, plus the visitor's inbound `utm_source` as `utm_term` when they arrived from a tagged link. Attribution therefore lands in the analytics already running on andmaverick.com, and this site stores nothing itself. The Verify button, when clicked, requests files from raw.githubusercontent.com.
+
+## The Private Architecture Review and the commercial funnel
+
+The principal invitation after the simulation is **Request a private architecture review**. It is also reachable from The Million Dollar Question, The Receipts and the GitHub profile (a link ending in `#review` opens it directly). It reuses the inquiry pattern already on andmaverick.com: the form builds a structured email to the published address, and the visitor sends it from their own mail client or copies it. No server and no second lead system exist. The inquiry carries a reference such as `PAR-261108-K3QZ` and the context of the visit: environment, incidents run, tools inspected, rooms visited and referral. Modeled assumptions from The Million Dollar Question are included only if the visitor ticks a box, and the executive report is never attached automatically.
+
+| Stage | Where it is measured | What counts |
+|---|---|---|
+| Visit | GA4 event `cr_page` with referral source and campaign | A page view in any room |
+| Interactive experience | `cr_scenario`, `cr_break`, `cr_incident`, `cr_tool_inspect`, `cr_report` | Exploration, not intent |
+| Simulation completion | `cr_complete` | All five incidents reached |
+| Invitation selected | `par_open` (and `par_invite_view` for the finale) | A click on the invitation. Not a lead |
+| Inquiry prepared | `par_compose` | The visitor pressed Prepare and the email app opened. Not proof it was sent |
+| Lead | The email that arrives in the inbox, carrying a `PAR-` reference | A submitted inquiry |
+| Qualified conversation, proposal, signed engagement | Recorded by hand against the same reference | Separate stages, never inferred from clicks |
+
+Because delivery depends on the visitor's email client, the reliable count of inquiries is the number of `PAR-` emails received. Compare it with `par_compose` to see how many prepared inquiries were never sent. GA4 reports the hostname `andmaverick.github.io` for these events, so filter by hostname to separate them from the main site.
 
 ## Adding a scenario
 
