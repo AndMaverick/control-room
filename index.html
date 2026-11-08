@@ -83,7 +83,7 @@
     <div class="controls"><button class="btn quiet" id="verify">Verify against GitHub</button><span class="dim" id="verify-out" aria-live="polite"></span></div>
   </div>
   <div class="controls" style="margin-top:34px;justify-content:center"><button class="btn" id="rerun">Adjust and run again</button><button class="btn primary" id="conclude">Conclude</button></div>
-  <div class="grid g3" style="margin-top:50px" id="rooms-links"></div>
+  <div class="grid g2" style="margin-top:50px" id="rooms-links"></div>
 </section>
 
 </main>
@@ -93,20 +93,21 @@
     <div class="wrap">
       <h2 class="mega fade-in" id="f1">Now imagine this was <em>your institution.</em></h2>
       <p class="lede fade-in" id="f2" style="margin-top:34px">The architecture is the difference.</p>
-      <div class="fade-in" id="f3" style="margin-top:56px;display:grid;gap:22px;justify-items:center">
-        <a class="btn primary" id="cta-site" href="#">Explore AndMaverick</a>
-        <a class="btn quiet" id="cta-book" href="#">Begin an advisory conversation</a>
-        <a class="btn quiet" href="question.html">Price your own architecture</a>
-        <button class="btn quiet" id="curtain-close" style="border:0">Return to the control room</button>
+      <div class="fade-in door" id="f3">
+        <p class="eyebrow">By invitation</p>
+        <button class="btn primary door-btn" id="cta-review" data-par="control-room-finale">Request a private architecture review</button>
+        <p class="lede door-copy">You&rsquo;ve seen what the architecture reveals in a simulated environment. Let&rsquo;s examine the decisions shaping your own AI program.</p>
+        <div class="door-more"><a class="btn quiet" id="cta-site" href="#">Explore AndMaverick</a><a class="btn quiet" href="question.html">Price your own architecture</a><button class="btn quiet" id="curtain-close" style="border:0">Return to the control room</button></div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="loader" id="loader" role="status">Opening the control room</div>
-<footer class="site"><div class="wrap">Synthetic scenarios, real execution. The code is MIT licensed and lives at <a href="https://github.com/AndMaverick">github.com/AndMaverick</a>. This site sets no cookies and stores nothing. It loads the Python runtime and fonts from the jsDelivr CDN, and contacts GitHub only if you click Verify.</div></footer>
+<footer class="site"><div class="wrap">Synthetic scenarios, real execution. The code is MIT licensed and lives at <a href="https://github.com/AndMaverick">github.com/AndMaverick</a>. This site sets no cookies. It keeps a short record of what you explore in this browser tab only, so an inquiry can carry that context if you choose to send one. It loads the Python runtime and fonts from the jsDelivr CDN, sends cookieless usage events to Google Analytics, and contacts GitHub only if you click Verify.</div></footer>
 
 <script src="assets/shared.js"></script>
+<script src="assets/review.js"></script>
 <script src="assets/control-room.js"></script>
 </body>
 </html>
