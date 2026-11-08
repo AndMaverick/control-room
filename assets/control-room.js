@@ -14,6 +14,7 @@
     sovereignty: { n: "04", title: "Jurisdictional exposure", tool: "sovereign.map" },
     economics: { n: "05", title: "Economic deterioration", tool: "roi.lens" },
   };
+  const NAMES = { bank: "Global Investment Bank", sovereign: "Sovereign Government AI Program", scale: "AI Company Scaling to 10 Million Users" };
   const state = { engine: null, key: null, overrides: {}, results: {}, idx: 0, paused: false, timer: null, running: false, summary: null };
 
   /* ---------- engine ---------- */
@@ -28,7 +29,7 @@
   /* ---------- scenario selection ---------- */
   $$("#scenarios .scn").forEach((b) => b.addEventListener("click", () => {
     $$("#scenarios .scn").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    state.key = b.dataset.key; state.overrides = {};
+    state.key = b.dataset.key; state.overrides = {}; CR.ctx.setEnv(NAMES[state.key]); CR.track("cr_scenario", { scenario: state.key });
     $("#brief").hidden = false;
     $("#brief").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
     if (state.engine) prepare(); else $("#engine-note").textContent = "Starting the engine. This takes a few seconds the first time.";
@@ -70,18 +71,19 @@
     if (!state.engine || !state.key) return;
     clearTimeout(state.timer);
     state.engine.start(state.key, state.overrides);
-    state.results = {}; state.idx = 0; state.paused = false; state.running = true;
+    state.results = {}; state.idx = 0; state.paused = false; state.running = true; CR.track("cr_break", { scenario: state.key });
     $("#pause").textContent = "Pause";
     $("#theatre").hidden = false; $("#findings").hidden = true;
     renderKpis(); renderLog(); drawDiagram(); $("#incident").innerHTML = '<p class="eyebrow">Initiating a simulated production incident</p>';
     $("#theatre").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
     state.timer = setTimeout(runStep, reduced ? 0 : 1200);
   }
+  function note(id, r) { CR.ctx.addIncident(META[id].title, r.status); CR.track("cr_incident", { incident: id, status: r.status, scenario: state.key }); }
   function runStep() {
     if (state.idx >= ORDER.length) return finish();
     const id = ORDER[state.idx];
     const res = state.engine.step(id);
-    state.results[id] = res;
+    state.results[id] = res; note(id, res);
     highlight(id, res.status);
     renderIncident(id, res);
     updateKpis(id, res);
@@ -96,12 +98,12 @@
     clearTimeout(state.timer);
     if (!state.paused && state.idx < ORDER.length) state.timer = setTimeout(runStep, 800);
   });
-  $("#skip").addEventListener("click", () => { clearTimeout(state.timer); while (state.idx < ORDER.length) { const id = ORDER[state.idx]; const r = state.engine.step(id); state.results[id] = r; updateKpis(id, r); renderIncident(id, r); state.idx++; } finish(); });
+  $("#skip").addEventListener("click", () => { clearTimeout(state.timer); while (state.idx < ORDER.length) { const id = ORDER[state.idx]; const r = state.engine.step(id); state.results[id] = r; note(id, r); updateKpis(id, r); renderIncident(id, r); state.idx++; } finish(); });
   $("#rerun").addEventListener("click", () => { $("#knobs").open = true; $("#brief").scrollIntoView({ behavior: reduced ? "auto" : "smooth" }); });
 
   function finish() {
     if (!state.running) return;
-    state.running = false; clearTimeout(state.timer);
+    state.running = false; clearTimeout(state.timer); CR.ctx.complete(); CR.track("cr_complete", { scenario: state.key });
     highlight(null); renderLog();
     renderFindings();
     $("#findings").hidden = false;
@@ -275,7 +277,6 @@
     $("#rooms-links").innerHTML = [
       ["receipts.html", "The Receipts", "The professional and published history behind the engineering, with sources."],
       ["question.html", "The Million Dollar Question", "Run your own assumptions through the same tools and take the report to your board."],
-      [links.book("findings-book", state.key), "Speak with Andrew", "A serious conversation about the architecture of your program."],
     ].map(([h, t, d]) => `<a class="panel pad" href="${h}" style="border-bottom:0;display:block"><h3>${t}</h3><p class="dim" style="margin-top:8px">${d}</p></a>`).join("");
   }
   $("#verify").addEventListener("click", async () => {
@@ -285,16 +286,28 @@
     out.innerHTML = `${ok} of ${res.length} files identical to GitHub.` + (bad.length ? ` Different: ${bad.map((b) => esc(b.name)).join(", ")}.` : "") + (err.length ? " Some could not be reached." : "");
   });
 
+  /* what the visitor looked into, so an inquiry can say what motivated it */
+  const KINDS = ["source code", "architecture notes", "tests", "related essay"];
+  const toolOf = (el) => el.closest("#cards article").querySelector("h3").textContent;
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("#cards .links a");
+    if (a) { const k = KINDS[[...a.parentNode.children].indexOf(a)] || "link"; CR.ctx.inspect(toolOf(a), k); CR.track("cr_tool_inspect", { tool: toolOf(a), kind: k }); }
+  });
+  document.addEventListener("toggle", (e) => {
+    const d = e.target;
+    if (d.open && d.closest && d.closest("#cards article")) { CR.ctx.inspect(toolOf(d), "executed calls"); CR.track("cr_tool_inspect", { tool: toolOf(d), kind: "executed calls" }); }
+  }, true);
+
   /* ---------- finale ---------- */
   const curtain = $("#curtain");
   $("#conclude").addEventListener("click", () => {
-    $("#cta-site").href = links.site("finale-explore", state.key); $("#cta-book").href = links.book("finale-book", state.key);
+    $("#cta-site").href = links.site("finale-explore", state.key); CR.track("par_invite_view", { where: "control-room-finale" });
     curtain.hidden = false; document.body.style.overflow = "hidden";
     requestAnimationFrame(() => { curtain.style.opacity = 1; });
     ["f1", "f2", "f3"].forEach((id, i) => setTimeout(() => $("#" + id).classList.add("in"), reduced ? 0 : 1400 + i * 1500));
     $("#curtain-close").focus({ preventScroll: true });
   });
   $("#curtain-close").addEventListener("click", closeCurtain);
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !curtain.hidden) closeCurtain(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !curtain.hidden && !document.querySelector("dialog[open]")) closeCurtain(); });
   function closeCurtain() { curtain.style.opacity = 0; setTimeout(() => { curtain.hidden = true; document.body.style.overflow = ""; ["f1", "f2", "f3"].forEach((i) => $("#" + i).classList.remove("in")); }, reduced ? 0 : 900); }
 })();
