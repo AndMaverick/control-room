@@ -25,7 +25,7 @@
   const inbound = { source: params.get("utm_source") || "direct", campaign: params.get("utm_campaign") || "" };
 
   /* Outbound links carry source, medium and content so andmaverick.com analytics can attribute them.
-     Nothing is stored or sent from this site itself: no cookies, no scripts from third parties. */
+     Attribution rides on the link itself. This site sets no cookies. */
   function utm(url, content, campaign) {
     const u = new URL(url);
     u.searchParams.set("utm_source", "controlroom");
