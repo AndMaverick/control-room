@@ -38,14 +38,21 @@
     return p;
   }
 
-  let engine = null, last = null, timer = null;
+  let engine = null, last = null, timer = null, touched = false;
   CR.loadEngine().then((e) => { engine = e; run(); });
-  $("#form").addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(run, 250); });
+  $("#form").addEventListener("input", () => { touched = true; clearTimeout(timer); timer = setTimeout(run, 250); });
   $("#form").addEventListener("submit", (e) => e.preventDefault());
 
   function run() {
     if (!engine) return;
-    try { last = engine.mdq(read()); render(last); } catch (e) { $("#out").innerHTML = `<div class="panel pad"><p>That combination of inputs could not be calculated: ${esc(e.message)}</p></div>`; }
+    try { last = engine.mdq(read()); render(last); if (touched) remember(); } catch (e) { $("#out").innerHTML = `<div class="panel pad"><p>That combination of inputs could not be calculated: ${esc(e.message)}</p></div>`; }
+  }
+
+  function remember() {
+    const p = read(), r = last, s = r.roi.simulate;
+    CR.ctx.setMdq(
+      fmt.int(p.monthly_requests) + " requests/month; " + fmt.int(p.input_tokens) + " in / " + fmt.int(p.output_tokens) + " out tokens; mix " + p.mix.frontier + "/" + p.mix.balanced + "/" + p.mix.fast + "% frontier/balanced/fast; growth " + p.monthly_growth_pct + "%/month; infrastructure " + fmt.full(p.infra_monthly) + "/month; implementation " + fmt.full(p.implementation_cost) + "; " + fmt.int(p.users) + " users; build " + fmt.full(p.build_upfront) + " upfront and " + fmt.full(p.build_annual) + "/year",
+      "year one " + fmt.full(r.cost_outlook.year1) + "; median 12-month return " + fmt.full(s.p50) + " (" + fmt.pct(s.prob_positive) + " chance of a positive return); build versus buy leader: " + r.build_vs_buy.ranked[0].name);
   }
 
   function bars(rows, key, labelKey, f) {
@@ -77,7 +84,7 @@
       <table class="t" style="margin-top:12px"><tbody>${r.opportunities.map((o) => `<tr><td><b>${esc(o.title)}</b><br><span class="dim">${esc(o.assumption)}</span></td><td class="r num" style="font-size:22px">${fmt.money(o.annual_saving)}<br><span class="dim" style="font:300 11px var(--ui)">a year</span></td></tr>`).join("")}</tbody></table>
       <p class="dim" style="font-size:13px">Each saving is the difference between two model.ledger runs. Whether the assumption holds is an engineering question, and the most valuable one to examine first.</p></div>
     <details class="panel pad src" style="margin-top:18px"><summary>The calls behind these numbers</summary>${r.executed.map((e) => `<div><span class="tag exec">${esc(e.tool)}</span><div class="call">${esc(e.call)}</div><div class="result">${esc(pretty(e.result))}</div></div>`).join("")}<ul class="dim">${r.notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul></details>
-    <div class="controls" style="margin-top:26px"><button class="btn primary" id="gen">Generate the executive report</button><a class="btn" href="${links.book("question-book", "question")}">Discuss this analysis</a></div>`;
+    <div class="controls" style="margin-top:26px"><button class="btn primary" id="gen">Generate the executive report</button><button class="btn" type="button" data-par="question-results">Request a private architecture review</button></div>`;
     $("#gen").addEventListener("click", makeReport);
   }
 
@@ -105,9 +112,10 @@
   }
   function makeReport() {
     if (!last) return;
+    touched = true; remember(); CR.ctx.reportMade(); CR.track("cr_report");
     $("#report-wrap").hidden = false;
     $("#report").innerHTML = reportHtml(last, false) +
-      `<div class="controls no-print" style="margin-top:30px"><button class="btn primary" id="dl">Download the report</button><button class="btn" id="pr">Print or save as PDF</button></div>`;
+      `<div class="controls no-print" style="margin-top:30px"><button class="btn primary" id="dl">Download the report</button><button class="btn" id="pr">Print or save as PDF</button><button class="btn quiet" type="button" data-par="question-report">Request a private architecture review</button></div>`;
     $("#report-wrap").scrollIntoView({ behavior: CR.reduced ? "auto" : "smooth" });
     $("#dl").onclick = () => {
       const html = `<!doctype html><html lang="en"><meta charset="utf-8"><title>AndMaverick executive report</title><body>${reportHtml(last, true)}</body></html>`;
