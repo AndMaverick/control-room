@@ -24,7 +24,7 @@ def check(cond, msg):
 async def main():
     async with async_playwright() as p:
         b = await p.chromium.launch()
-        ctx = await b.new_context(viewport={"width": 1440, "height": 900})
+        ctx = await b.new_context(viewport={"width": 1440, "height": 900}); await ctx.add_init_script("window.CR_INQUIRY_ENDPOINT = '';")
         await ctx.route("https://cdn.jsdelivr.net/**", route_cdn)
         await ctx.route("https://www.googletagmanager.com/**", lambda r: r.fulfill(status=200, body="window.__gtm=1;", content_type="text/javascript"))
         pg = await ctx.new_page(); errs = []
@@ -83,7 +83,7 @@ async def main():
         await pg.click(".linklike[data-par=receipts]"); await pg.wait_for_selector("dialog.par[open]")
         check(True, "receipts invitation opens the review")
         # mobile
-        m = await b.new_context(viewport={"width": 390, "height": 844}); await m.route("https://cdn.jsdelivr.net/**", route_cdn); await m.route("https://www.googletagmanager.com/**", lambda r: r.fulfill(status=200, body="", content_type="text/javascript"))
+        m = await b.new_context(viewport={"width": 390, "height": 844}); await m.add_init_script("window.CR_INQUIRY_ENDPOINT = '';"); await m.route("https://cdn.jsdelivr.net/**", route_cdn); await m.route("https://www.googletagmanager.com/**", lambda r: r.fulfill(status=200, body="", content_type="text/javascript"))
         mp = await m.new_page(); await mp.goto(BASE + "index.html#review"); await mp.wait_for_selector("dialog.par[open]")
         w = await mp.evaluate("[document.documentElement.scrollWidth, innerWidth, document.querySelector('dialog.par').scrollWidth, document.querySelector('dialog.par').clientWidth]")
         check(w[0] <= w[1] and w[2] <= w[3], "mobile: no horizontal overflow %s" % w)
