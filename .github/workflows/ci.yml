@@ -13,6 +13,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Harness tests
         run: python -I -m unittest discover -s tests -t . -v -p "test_*.py"
+      - name: Inquiry builder tests
+        run: node --test tests/review.test.js
       - name: Manifest is current
         run: |
           python build.py
