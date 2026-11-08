@@ -1,4 +1,4 @@
-/* Node built-in test runner: node --test tests/review.test.js */
+/* Node built-in test runner: node --test tests/ */
 const test = require("node:test");
 const assert = require("node:assert");
 const R = require("../assets/review.js");
