@@ -19,3 +19,14 @@ jobs:
         run: |
           python build.py
           git diff --exit-code py/manifest.json
+  inquiry-service:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check the edge function
+        run: deno check backend/supabase/functions/inquiry/index.ts
+      - name: Inquiry service tests
+        run: deno test --no-check backend/tests/inquiry_test.ts
