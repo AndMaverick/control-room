@@ -12,7 +12,7 @@ import base64, gzip, json, pathlib, shutil, sys
 root = pathlib.Path(__file__).resolve().parent
 py = root / "py"
 files = sorted(str(p.relative_to(py)) for p in py.rglob("*.py"))
-(py / "manifest.json").write_text(json.dumps({"files": files}, indent=1))
+(py / "manifest.json").write_text(json.dumps({"files": files}, indent=1) + "\n")
 print(len(files), "python files in manifest")
 
 if len(sys.argv) > 1:
