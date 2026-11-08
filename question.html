@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What is your AI architecture actually costing you? | AndMaverick</title>
+<meta name="description" content="Enter a few assumptions. AndMaverick's open source economics tools calculate your AI cost outlook, unit economics, scaling sensitivity, build versus buy, and return, with every assumption exposed. No email required.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23050506%27/%3E%3Cpath d=%27M16 5l9 21h-4l-2-5h-6l-2 5H7z%27 fill=%27%23c9a96e%27/%3E%3C/svg%3E">
+<meta name="theme-color" content="#050506">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<main id="main">
+<section class="stage" style="min-height:auto;padding-bottom:30px">
+  <div class="wrap">
+    <p class="eyebrow">The Million Dollar Question</p>
+    <h1 class="mega" style="margin:26px 0 26px;font-size:clamp(40px,7.4vw,112px)">What is your AI architecture <em>actually costing you?</em></h1>
+    <p class="lede" style="max-width:42ch">Enter a few assumptions. The tools do the arithmetic and show their work.</p>
+    <p class="dim" style="max-width:62ch;margin-top:20px">Nothing leaves your browser. No email is needed to run the assessment or to download the report.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="theatre" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr)">
+    <form class="panel pad" id="form" autocomplete="off" aria-label="Your assumptions" style="position:sticky;top:70px;max-height:calc(100vh - 90px);overflow:auto">
+      <p class="eyebrow">Your assumptions <span class="tag input" style="margin-left:8px">Input</span></p>
+      <div class="grid" style="margin-top:18px;gap:16px" id="fields"></div>
+    </form>
+    <div id="out" aria-live="polite"><div class="panel pad"><p class="eyebrow">Starting the engine</p><p class="dim">The tools run in your browser. This takes a few seconds the first time.</p></div></div>
+  </div>
+</section>
+
+<section class="wrap" id="report-wrap" style="margin-top:50px" hidden>
+  <div class="report" id="report"></div>
+</section>
+</main>
+<footer class="site"><div class="wrap">Prices are synthetic tiers, not any vendor&rsquo;s rates. Results are modelled outlooks to support a conversation, not forecasts or financial advice. This site sets no cookies and stores nothing. Your inputs never leave your browser. The Python runtime and fonts load from the jsDelivr CDN.</div></footer>
+<script src="assets/shared.js"></script>
+<script src="assets/question.js"></script>
+</body>
+</html>
