@@ -207,3 +207,21 @@ select option{background:#0b0b0e}
 .par-err{color:var(--amber);font-size:13px;margin:0}
 @media print{dialog.par,.door{display:none!important}}
 .par-r form[hidden],.par-r div[hidden]{display:none}
+
+/* Private Architecture Review: submission, confirmation, and quiet input states */
+.par-r input[type=text],.par-r input[type=email]{background:#07070a;border:1px solid var(--line2);color:var(--text);padding:12px 14px;font:400 15px var(--ui);width:100%;border-radius:0}
+.par-r input:focus,.par-r select:focus,.par-r textarea:focus{outline:0;border-color:var(--gold);box-shadow:0 0 0 1px rgba(201,169,110,.35),0 10px 40px -18px rgba(201,169,110,.35)}
+.par-r input:disabled,.btn:disabled{opacity:.55;cursor:default}
+.par-hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.par-fail{border-left:1px solid var(--gold);padding:2px 0 2px 16px;color:#cfc9bb;font-size:14px}
+.par-fail p{margin:0 0 6px}
+#par-wait{display:grid;gap:26px;align-content:center;min-height:300px;animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+.par-seal{height:1px;background:rgba(201,169,110,.18);overflow:hidden}
+.par-seal i{display:block;height:1px;width:100%;background:linear-gradient(90deg,transparent,var(--gold),var(--soft));transform-origin:left;animation:seal 1.2s cubic-bezier(.3,.6,.2,1) both}
+@keyframes seal{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+#par-sent{display:grid;gap:12px;align-content:center;min-height:300px;animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
+.par-received{font:400 clamp(30px,4.2vw,52px)/1.08 var(--display);margin:6px 0 0;color:var(--text);outline:0}
+.par-personal{font:italic 400 clamp(19px,2.2vw,26px)/1.3 var(--display);color:var(--soft);margin:0 0 18px}
+.par-refline{margin:0;font:400 12px var(--ui);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.par-refline b{color:var(--gold);font-weight:500;letter-spacing:.2em}
+#par-wait[hidden],#par-sent[hidden],.par-fail[hidden],.par-err[hidden]{display:none}
