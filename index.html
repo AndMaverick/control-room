@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The AndMaverick Control Room</title>
+<meta name="description" content="A private demonstration of what happens when enterprise AI goes wrong, and how real, inspectable engineering catches it. Every analytical result is produced by AndMaverick's open source tools, running in your browser.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%23050506%27/%3E%3Cpath d=%27M16 5l9 21h-4l-2-5h-6l-2 5H7z%27 fill=%27%23c9a96e%27/%3E%3C/svg%3E">
+<meta name="theme-color" content="#050506">
+<meta property="og:title" content="The AndMaverick Control Room">
+<meta property="og:description" content="You have a $12 million AI program. Let's find out whether it survives production.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<main id="main">
+
+<section id="opening" class="stage">
+  <div class="wrap">
+    <p class="eyebrow">The AndMaverick Control Room</p>
+    <h1 class="mega" style="margin:28px 0 30px">You have a $12&nbsp;million <em>AI&nbsp;program.</em></h1>
+    <p class="lede" style="max-width:34ch">Let&rsquo;s find out whether it survives production.</p>
+    <p class="dim" style="max-width:58ch;margin-top:26px">A private look inside the architecture of enterprise intelligence. Every analytical result below is produced by AndMaverick&rsquo;s own open source tools, running in your browser. Nothing is pre-recorded.</p>
+    <hr class="rule" style="margin:clamp(40px,8vh,90px) 0 34px">
+    <p class="eyebrow" id="choose">Choose your environment</p>
+    <div class="grid g3" style="margin-top:22px" role="group" aria-labelledby="choose" id="scenarios">
+      <button class="panel scn" data-key="bank" aria-pressed="false"><span class="pad"><span class="letter">A</span><h3>Global Investment Bank</h3><span class="dim">An AI deployment spanning multiple financial jurisdictions. Operational reliability, jurisdictional requirements, cost, and the risk of exposing sensitive information.</span></span></button>
+      <button class="panel scn" data-key="sovereign" aria-pressed="false"><span class="pad"><span class="letter">B</span><h3>Sovereign Government AI Program</h3><span class="dim">A national deployment with residency requirements, procurement considerations, service reliability obligations and institutional oversight. What losing control costs.</span></span></button>
+      <button class="panel scn" data-key="scale" aria-pressed="false"><span class="pad"><span class="letter">C</span><h3>AI Company Scaling to 10&nbsp;Million Users</h3><span class="dim">A consumer AI product facing unpredictable inference costs, shifting model quality and mounting infrastructure demand. Unit economics under growth.</span></span></button>
+    </div>
+  </div>
+</section>
+
+<section id="brief" class="wrap" hidden style="padding:clamp(40px,8vh,90px) clamp(16px,4vw,48px)">
+  <p class="eyebrow">Operating assumptions <span class="tag input" style="margin-left:10px">Scenario input</span></p>
+  <h2 class="big" id="b-name" style="margin:18px 0 12px"></h2>
+  <p class="lede" id="b-tag" style="max-width:48ch"></p>
+  <div class="grid g2" style="margin-top:34px">
+    <div class="panel pad"><h3>The program</h3><div id="b-program" style="margin-top:14px"></div></div>
+    <div class="panel pad"><h3>The workloads</h3><div style="overflow-x:auto"><table class="t" id="b-teams"></table></div><p class="hint dim" style="margin-top:10px">Prices are synthetic tiers, per 1,000 tokens: <span id="b-prices"></span>. They are not any vendor&rsquo;s published rates.</p></div>
+  </div>
+  <details class="panel pad" style="margin-top:20px" id="knobs">
+    <summary class="eyebrow" style="cursor:pointer">Adjust the scenario</summary>
+    <div class="grid g2" style="margin-top:22px">
+      <label class="f">Agent loop amplification <span id="k1v" class="num" style="font-size:20px;color:var(--soft)"></span><input type="range" id="k1" min="1.2" max="6" step="0.1"><span class="hint">Output tokens per request on the affected team after the change.</span></label>
+      <label class="f">Quality regression <span id="k2v" class="num" style="font-size:20px;color:var(--soft)"></span><input type="range" id="k2" min="0.01" max="0.10" step="0.005"><span class="hint">Drop in mean evaluation score after the model or prompt change.</span></label>
+      <label class="f">Adoption lost after incidents <span id="k3v" class="num" style="font-size:20px;color:var(--soft)"></span><input type="range" id="k3" min="0" max="0.4" step="0.01"><span class="hint">Share of expected users who stop trusting the system.</span></label>
+      <label class="f">Remediation cost <span id="k4v" class="num" style="font-size:20px;color:var(--soft)"></span><input type="range" id="k4" min="0" max="3000000" step="50000"><span class="hint">One-off spend to fix the architecture, added to the build cost.</span></label>
+    </div>
+  </details>
+  <div style="margin-top:44px;text-align:center">
+    <button class="btn break" id="break" disabled>Break the system</button>
+    <p class="hint dim" id="engine-note" style="margin-top:16px"></p>
+  </div>
+</section>
+
+<section id="theatre" class="wrap" hidden style="padding:clamp(30px,6vh,70px) clamp(16px,4vw,48px)">
+  <div class="log" id="log" aria-label="Incident sequence"></div>
+  <div class="grid g3" style="margin-top:22px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))" id="kpis"></div>
+  <div class="theatre" style="margin-top:22px">
+    <div class="panel pad diagram" id="diagram-wrap"><p class="eyebrow">Architecture</p><div id="diagram"></div><p class="hint dim">Select a tool to jump to its findings. Illuminated parts are executing now.</p></div>
+    <div class="panel pad incident" id="incident" aria-live="polite"></div>
+  </div>
+  <div class="controls" style="margin-top:20px;justify-content:space-between">
+    <div class="controls"><button class="btn quiet" id="pause">Pause</button><button class="btn quiet" id="next">Next incident</button></div>
+    <div class="controls"><button class="btn quiet" id="skip">Skip to analysis</button></div>
+  </div>
+</section>
+
+<section id="findings" class="wrap" hidden style="padding:clamp(40px,8vh,90px) clamp(16px,4vw,48px)">
+  <p class="eyebrow">Diagnostic findings</p>
+  <h2 class="big" style="margin:18px 0 12px">The software <em>did the work.</em></h2>
+  <p class="lede" style="max-width:52ch">Five tools, each independent, each open source. Below is exactly what each one was asked and exactly what it answered.</p>
+  <div class="panel pad" style="margin-top:28px">
+    <p class="eyebrow">How to read this page</p>
+    <div class="ev" style="margin-top:12px"><span class="tag input">Scenario input</span><span class="dim">A number or rule I chose for the simulation. Open the briefing above to inspect and change them.</span></div>
+    <div class="ev"><span class="tag exec">Executed</span><span class="dim">The return value of a real function call, running in this page.</span></div>
+    <div class="ev"><span class="tag derived">Derived</span><span class="dim">Simple arithmetic in the demonstration harness, with its formula shown. Not a tool output.</span></div>
+  </div>
+  <div class="grid" id="cards" style="margin-top:24px"></div>
+  <div class="panel pad" style="margin-top:24px">
+    <h3>Verify the code is real</h3>
+    <p class="dim" style="margin-top:10px">This page runs copies of the tools&rsquo; source files. The check below downloads each file from GitHub and compares it with the copy running here, byte for byte.</p>
+    <div class="controls"><button class="btn quiet" id="verify">Verify against GitHub</button><span class="dim" id="verify-out" aria-live="polite"></span></div>
+  </div>
+  <div class="controls" style="margin-top:34px;justify-content:center"><button class="btn" id="rerun">Adjust and run again</button><button class="btn primary" id="conclude">Conclude</button></div>
+  <div class="grid g3" style="margin-top:50px" id="rooms-links"></div>
+</section>
+
+</main>
+
+<div id="curtain" role="dialog" aria-modal="true" aria-label="Conclusion" hidden style="position:fixed;inset:0;z-index:80;background:#000;opacity:0;transition:opacity 1.6s ease;overflow:auto">
+  <div class="finale">
+    <div class="wrap">
+      <h2 class="mega fade-in" id="f1">Now imagine this was <em>your institution.</em></h2>
+      <p class="lede fade-in" id="f2" style="margin-top:34px">The architecture is the difference.</p>
+      <div class="fade-in" id="f3" style="margin-top:56px;display:grid;gap:22px;justify-items:center">
+        <a class="btn primary" id="cta-site" href="#">Explore AndMaverick</a>
+        <a class="btn quiet" id="cta-book" href="#">Begin an advisory conversation</a>
+        <a class="btn quiet" href="question.html">Price your own architecture</a>
+        <button class="btn quiet" id="curtain-close" style="border:0">Return to the control room</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loader" id="loader" role="status">Opening the control room</div>
+<footer class="site"><div class="wrap">Synthetic scenarios, real execution. The code is MIT licensed and lives at <a href="https://github.com/AndMaverick">github.com/AndMaverick</a>. This site sets no cookies and stores nothing. It loads the Python runtime and fonts from the jsDelivr CDN, and contacts GitHub only if you click Verify.</div></footer>
+
+<script src="assets/shared.js"></script>
+<script src="assets/control-room.js"></script>
+</body>
+</html>
