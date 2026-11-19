@@ -10,7 +10,7 @@
     press: ["Third-party press", "Reported by an independent publication."],
     conversation: ["Public conversation", "A recorded conversation hosted by someone else."],
     published: ["Published by me", "Writing and code I published myself."],
-    self: ["Self-reported", "My own account, as published on andmaverick.com."],
+    self: ["On the record", "Stated by Andrew Quillen under his own name, and defended by him. Published on andmaverick.com."],
   };
   $("#legend").innerHTML = Object.entries(EVIDENCE).map(([k, [n, d]]) => `<span class="tag ${k === "press" || k === "conversation" ? "exec" : k === "self" ? "input" : ""}" title="${esc(d)}">${n}</span>`).join("");
 
